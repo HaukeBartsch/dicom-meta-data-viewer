@@ -1,6 +1,8 @@
 # DICOM is complete
 
-A DICOM meta-data viewer that is safe to use in a hospital - based on Javascript.
+A DICOM meta-data viewer that is safe to use in a hospital - based on Javascript, the   [DICOM-Meta-Data-Viewer](https://haukebartsch.github.io/dicom-meta-data-viewer/).
+
+![Example screenshot after loading data](/docs/teaser.png "DICOM meta-data viewer after loading example DICOM from a zip-file.")
 
 ### Create a DICOM file from thin-air (and DCMTK)
 

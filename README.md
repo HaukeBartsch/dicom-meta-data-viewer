@@ -4,7 +4,7 @@ A DICOM meta-data viewer that is safe to use in a hospital - based on Javascript
 
 ![Example screenshot after loading data](/docs/teaser.png "DICOM meta-data viewer after loading example DICOM from a zip-file.")
 
-### Create a DICOM file from thin-air (and DCMTK)
+## Create a DICOM file from thin-air (and DCMTK)
 
 ```{bash}
 mkdir DICOM; cd DICOM
@@ -83,4 +83,28 @@ Here is the dump from the resulting DICOM image:
   (fffe,e000) pi (no value available)                     #   0, 1 Item
   (fffe,e000) pi ff\d8\ff\db\00\43\00\03\02\02\03\02\02\03\03\03\03\04\03\03\04\05... # 326, 1 Item
 (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
+```
+
+## Send DICOM around
+
+In order to forward DICOM files to a folder you just need a Sender and a Receiver:
+
+### Sender
+
+```{bash}
+DCMDICTPATH=/usr/local/Cellar/dcmtk/3.6.6_1/share/dcmtk/dicom.dic 
+
+storescp -v \
+    --aetitle HAUKE \
+    --exec-on-reception ”myScript.sh '#a' '#c' '#r' '#p' '#f’” \
+    --sort-on-study-uid scp \
+    --output-directory "/tmp/dicom/" \
+    11112
+```
+
+### Receiver
+
+```{bash}
+cd /to/where/the/data/is/you/want/to/send
+storescu -v -nh -aet me -aec HAUKE +r +sd localhost 11112 .
 ```

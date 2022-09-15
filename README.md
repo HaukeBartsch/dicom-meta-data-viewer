@@ -6,7 +6,7 @@ A DICOM meta-data viewer that is safe to use in a hospital - based on Javascript
 
 ## Create a DICOM file from thin-air (and DCMTK)
 
-```{bash}
+```bash
 mkdir DICOM; cd DICOM
 touch empty.dump
 dump2dcm empty.dump one.dcm
@@ -14,7 +14,7 @@ dump2dcm empty.dump one.dcm
 
 Now add more tags to the DICOM file:
 
-```{bash}
+```bash
 dcmdump one.dcm > step2.dump
 echo "(0010,0010) PN [WORKSHOP01]" >> step2.dump
 echo "(0010,0020) LN [WORKSHOP01]" >> step2.dump
@@ -25,7 +25,7 @@ dump2dcm step2.dump two.dcm
 
 Now add an image:
 
-```{bash}
+```bash
 echo "P1\n10 10\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n" > image.pnm
 convert image.pnm image.jpg
 img2dcm --series-from two.dcm image.jpg three.dcm
@@ -33,7 +33,7 @@ img2dcm --series-from two.dcm image.jpg three.dcm
 
 Here is the dump from the resulting DICOM image:
 
-```{bash}
+```bash
 > dcmdump three.dcm 
 
 # Dicom-File-Format
@@ -91,7 +91,7 @@ In order to forward DICOM files to a folder you just need a Sender and a Receive
 
 ### Sender
 
-```{bash}
+```bash
 DCMDICTPATH=/usr/local/Cellar/dcmtk/3.6.6_1/share/dcmtk/dicom.dic 
 
 storescp -v \
@@ -104,7 +104,7 @@ storescp -v \
 
 ### Receiver
 
-```{bash}
+```bash
 cd /to/where/the/data/is/you/want/to/send
 storescu -v -nh -aet me -aec HAUKE +r +sd localhost 11112 .
 ```
@@ -113,7 +113,7 @@ storescu -v -nh -aet me -aec HAUKE +r +sd localhost 11112 .
 
 The sender (SCU) will forward us a copy of each DICOM object. The receiver (SCP) will store it on disk and call our script "myScript.sh". Here an content of an example myScript.sh:
 
-```{bash}
+```bash
 #/usr/bin/env bash
 
 # We are called for each file once
@@ -144,6 +144,6 @@ As a result a file will be created in the /tmp/arrived folder on the receiver's 
 
 Here an example command line that just lists the study folder names as soon as a study arrives.
 
-```{bash}
+```bash
 watch -n 2 find /tmp/arrived/ -type f -not -newermt \'-16 seconds\'
 ```

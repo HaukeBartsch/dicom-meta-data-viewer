@@ -102,6 +102,12 @@ storescp -v \
     11112
 ```
 
+Whereas the storescp call is sufficient for receiving and sorting DICOM files into different folders the (data-transfer-station)[https://github.com/HaukeBartsch/data-transfer-station] project provides a solution with additional features:
+
+- sorting of DICOM files into Study/Series/ folders
+- creation of JSON structure files that summarize meta-data from DICOM
+- classification algorithm for received DICOM files into classes such as T1, T2, etc.
+
 ### Receiver
 
 ```bash
@@ -147,3 +153,4 @@ Here an example command line that just lists the study folder names as soon as a
 ```bash
 watch -n 2 find /tmp/arrived/ -type f -not -newermt \'-16 seconds\'
 ```
+

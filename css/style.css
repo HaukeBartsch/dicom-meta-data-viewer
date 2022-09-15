@@ -71,3 +71,17 @@ div.meta-header {
 html {
     scroll-behavior: smooth;
   }
+#tooltip-title {
+    font-size: 10pt;
+    text-align: left;
+    border-bottom: 1px solid #EEE;
+    margin: 0px;
+    padding-top: 0px;
+    margin-bottom: 2px;
+}
+
+.tooltip-line {
+    font-size: 11px;
+    text-align: left;
+    display: flex;
+}

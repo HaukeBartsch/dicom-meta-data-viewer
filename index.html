@@ -49,7 +49,7 @@
           <strong>DICOM is complete</strong>
         </a>
         <a href="https://github.com/HaukeBartsch/dicom-meta-data-viewer" class="d-flex align-items-center nav-link navbar-text">
-          git source code
+          source code
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
           aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,16 +91,31 @@
       <div id="grid" style="height: 300px; width: 100%; background-color: #DDD;"></div>
 
       <div id="meta-data-0-header" class="meta-header"></div>
-      <div style="width: 100%; height: 300px; overflow-y: auto;margin-bottom: 30px; margin-top: 0px;">
+      <div style="width: 100%; height: 300px; overflow-y: auto;margin-bottom: 30px; margin-top: 0px; border: 1px solid grey;">
         <ul id="meta-data-0" style="list-style-type: none; overflow-x: auto; font-family: 'Menlo', sans-serif; padding-left: 2px;"></ul>
       </div>
       <div id="meta-data-1-header" class="meta-header"></div>
-      <div style="width: 100%; height: 300px; overflow-y: auto;margin-bottom: 30px; margin-top: 0px;">
+      <div style="width: 100%; height: 300px; overflow-y: auto;margin-bottom: 30px; margin-top: 0px; border: 1px solid grey;">
         <ul id="meta-data-1" style="list-style-type: none; overflow-x: auto; font-family: 'Menlo', sans-serif; padding-left: 2px;"></ul>
       </div>
       <div id="meta-data-2-header" class="meta-header"></div>
-      <div style="width: 100%; height: 300px; overflow-y: auto;margin-bottom: 30px; margin-top: 0px;">
+      <div style="width: 100%; height: 300px; overflow-y: auto;margin-bottom: 30px; margin-top: 0px; border: 1px solid grey;">
         <ul id="meta-data-2" style="list-style-type: none; overflow-x: auto; font-family: 'Menlo', sans-serif; padding-left: 2px;"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="tooltip"
+    style="display: none; position: absolute; width: 350px; min-height: 60px; border: 1px solid gray; border-radius: 2px; background-color: white; fill: gray;">
+    <div id="tooltip-content"
+      style="overflow-y: scroll; padding-left: 5px; z-index: 1; height: 100%; padding-right: 5px; position: relative;">
+      <div id="tooltip-title"></div>
+      <div class="tooltip-line">
+        <div id="tooltip-modification"></div>
+      </div>
+      <div class="tooltip-line">
+      </div>
+      <div class="tooltip-line">
       </div>
     </div>
   </div>

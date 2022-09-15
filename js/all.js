@@ -407,6 +407,9 @@ function setupGrid(numberOfFiles) {
 	// I like to log the data to the console for quick debugging
 	//console.log(gridData);
 	
+	// clean out the previous svg, if there is one
+	jQuery('#grid svg').remove();
+
 	var grid = d3.select("#grid")
 	.append("svg")
 	.attr("width",w + "px")
@@ -418,6 +421,45 @@ function setupGrid(numberOfFiles) {
 	.attr("row-id", function(d, i) { return i; })
 	.attr("class", "row");
 	
+	var width = jQuery('#grid svg').width();
+	var mouseover = function (d) {
+		jQuery('#tooltip').show();
+		//jQuery('#tooltip').html(d.group + ": " + d.value);
+		d3.select(this)
+			.style("stroke", "orange")
+			.style('stroke-width', '2px')
+			.style("opacity", 1)
+	}
+	var mousemove = function (event, d) {
+		var mx = /*jQuery(this).offset().left + */ event.pageX;  // d3.pointer(event)[0];
+		var my = /*jQuery(this).offset().top + */ event.pageY; // d3.pointer(event)[1];
+		// we need to create the content for the tooltip
+		if (detailsList.length < d.counter)
+			return; // not ready yet
+		var entry = detailsList[d.counter];
+		jQuery('#tooltip-title').text(entry.zipEntryName.split("/")[0]);
+		//jQuery('#tooltip-location').text(d.group);
+		//jQuery('#tooltip-protein').text(entry.SeriesInstanceUID + " " + entry.SeriesDescription);
+		jQuery('#tooltip-modification').html("SeriesInstanceUID: " + entry.SeriesInstanceUID + "<br/>" + "StudyInstanceUID: " + entry.StudyInstanceUID);
+
+		// if we are on the right side of the page we should show the window more towards the middle
+		if ((mx + 10) > (2.0 * width / 3.0)) {
+			//console.log("on right side!");
+			mx -= (jQuery('#tooltip').width() + 20);
+		}
+
+		jQuery('#tooltip')
+			.css("left", (mx + 10) + "px")
+			.css("top", (my) + "px")
+			.show();
+	}
+	var mouseleave = function (event, d) {
+		jQuery('#tooltip').hide();
+		d3.select(this)
+			.style("stroke", "none")
+			.style("opacity", 1)
+	}
+
 	// default coloring of a cell based on the index
 	var myColor = d3.scaleSequential().domain([0, numberOfFiles]).interpolator(d3.interpolateYlOrBr /*d3.interpolateViridis*/);
 	
@@ -435,7 +477,9 @@ function setupGrid(numberOfFiles) {
 	.style("fill", function (d) {
 		return myColor(d.counter); 
 	})
-	//.style("stroke", "#222")
+		.on("mouseover", mouseover)
+		.on("mousemove", mousemove)
+		.on("mouseleave", mouseleave)
 	.on('click', function(ev, d) {
 		if (d.click == 0) {
 			// first click remember the current color
@@ -483,7 +527,7 @@ function colorGrid() {
 		var key = detailsList[i].StudyInstanceUID + "-" + detailsList[i].SeriesInstanceUID;
 		if (typeof seriesColorCache[key] == 'undefined')
 		   seriesColorCache[key] = "#" + Math.floor(Math.random()*16777215).toString(16);
-		jQuery('#grid svg rect[index=' + detailsList[i].num + ']').css('fill', seriesColorCache[key]);
+		jQuery('#grid svg rect[index=' + /* detailsList[i].num */ i + ']').css('fill', seriesColorCache[key]);
 	}
 	lastColoredIndex = detailsList.length;
 }
@@ -522,7 +566,7 @@ jQuery(document).ready(function () {
 					text: " (loaded in " + (dateAfter - dateBefore) + "ms)"
 				}));
 				numFilesTotal = numFilesTotal + Object.keys(zip.files).length;
-				jQuery('#stat').html("Number of files: <span id='loadingCounter'>0</span>/" + numFilesTotal.toLocaleString("en-US") + "<br/>Number of series: <span id='number-series'>0</span>");
+				jQuery('#stat').html("Number of files (DICOM/total): <span id='loadingCounter'>0</span>/" + numFilesTotal.toLocaleString("en-US") + "<br/>Number of series: <span id='number-series'>0</span>");
 				
 				// here we can setup our grid
 				setupGrid(numFilesTotal);
@@ -579,7 +623,8 @@ jQuery(document).ready(function () {
 								}
 								
 								jQuery('#series-results').append(`<div class="col-sm-12 col-lg-3 col-md-4 series" 
-								id="ser-${sanSeriesInstanceUID}" 
+								id="ser-${sanSeriesInstanceUID}"
+								SeriesInstanceUID="${ks[i]}"
 								style="background-color: ${cssRules['backgroundColor']}; color: ${cssRules['textColor']}">
 								${safetext(seriesObject[ks[i]]["PatientID"])}, ${seriesObject[ks[i]]["StudyDate"]}
 								<br/>${safetext(seriesObject[ks[i]]["SeriesDescription"])}
@@ -659,7 +704,10 @@ jQuery(document).ready(function () {
 		jQuery('#meta-data-2').parent().scrollTop(jQuery('#meta-data-0').parent().scrollTop());
 	});
 	
-	
+	jQuery("#series-results").on('click', "div.series", function () {
+		var SeriesInstanceUID = jQuery(this).attr("SeriesInstanceUID");
+		console.log("HI" + SeriesInstanceUID);
+	});
 });
 
 // This code will attach `fileselect` event to all file inputs on the page

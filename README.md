@@ -96,7 +96,7 @@ DCMDICTPATH=/usr/local/Cellar/dcmtk/3.6.6_1/share/dcmtk/dicom.dic
 
 storescp -v \
     --aetitle HAUKE \
-    --exec-on-reception ”myScript.sh '#a' '#c' '#r' '#p' '#f’” \
+    --exec-on-reception "myScript.sh '#a' '#c' '#r' '#p' '#f’" \
     --sort-on-study-uid scp \
     --output-directory "/tmp/dicom/" \
     11112

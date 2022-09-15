@@ -108,3 +108,42 @@ storescp -v \
 cd /to/where/the/data/is/you/want/to/send
 storescu -v -nh -aet me -aec HAUKE +r +sd localhost 11112 .
 ```
+
+## Putting it all together
+
+The sender (SCU) will forward us a copy of each DICOM object. The receiver (SCP) will store it on disk and call our script "myScript.sh". Here an example:
+
+```{bash}
+#/usr/bin/env bash
+
+# We are called for each file once
+echo "We got this job: $*"
+
+# Idea
+# Create a file for each StudyInstanceUID. Later check how old that file is.
+# If the file is older than say 16sec - assume all data arrived and we can
+# start processing.
+
+StudyPath="$4"
+echo "Study path is: ${StudyPath}"
+
+touchFiles="/tmp/arrived"
+# create a directory to remember when we last received an image
+if [ ! -d ${touchFiles} ]; then
+    mkdir -p "${touchFiles}"
+fi
+
+StudyInstanceUID=`basename "${StudyPath}"`
+
+# create an empty file, filename is "scp_" + StudyInstanceUID
+echo "create touch file: ${touchFiles}/${StudyInstanceUID}"
+touch "${touchFiles}/${StudyInstanceUID}"
+```
+
+As a result a file will be created in the /tmp/arrived folder on the receiver's machine. We can check how new that file is. If its older than 16 seconds we did not receive a new DICOM file for that study in the past 16 seconds. We can assume sending is done and we can react to that by triggering a processing step.
+
+Here an example command line that just lists the study folder names as soon as a study arrived.
+
+```{bash}
+watch -n 2 find /tmp/arrived/ -type f -not -newermt \'-16 seconds\'
+```

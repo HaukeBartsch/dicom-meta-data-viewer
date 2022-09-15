@@ -111,7 +111,7 @@ storescu -v -nh -aet me -aec HAUKE +r +sd localhost 11112 .
 
 ## Putting it all together
 
-The sender (SCU) will forward us a copy of each DICOM object. The receiver (SCP) will store it on disk and call our script "myScript.sh". Here an example:
+The sender (SCU) will forward us a copy of each DICOM object. The receiver (SCP) will store it on disk and call our script "myScript.sh". Here an content of an example myScript.sh:
 
 ```{bash}
 #/usr/bin/env bash
@@ -142,7 +142,7 @@ touch "${touchFiles}/${StudyInstanceUID}"
 
 As a result a file will be created in the /tmp/arrived folder on the receiver's machine. We can check how new that file is. If its older than 16 seconds we did not receive a new DICOM file for that study in the past 16 seconds. We can assume sending is done and we can react to that by triggering a processing step.
 
-Here an example command line that just lists the study folder names as soon as a study arrived.
+Here an example command line that just lists the study folder names as soon as a study arrives.
 
 ```{bash}
 watch -n 2 find /tmp/arrived/ -type f -not -newermt \'-16 seconds\'

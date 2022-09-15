@@ -12,7 +12,7 @@ touch empty.dump
 dump2dcm empty.dump one.dcm
 ```
 
-Now add more tags to the DICOM file:
+Add more tags to the DICOM file:
 
 ```bash
 dcmdump one.dcm > step2.dump
@@ -23,7 +23,7 @@ echo "(0020,000E) UI [1.3.6.1.4.1.45037.5.2.1.123456789]" >> step2.dump
 dump2dcm step2.dump two.dcm
 ```
 
-Now add an image:
+Add an image informationn:
 
 ```bash
 echo "P1\n10 10\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0\n" > image.pnm
@@ -31,7 +31,7 @@ convert image.pnm image.jpg
 img2dcm --series-from two.dcm image.jpg three.dcm
 ```
 
-Here is the dump from the resulting DICOM image:
+Here is the meta-data from the resulting DICOM image:
 
 ```bash
 > dcmdump three.dcm 
@@ -83,6 +83,16 @@ Here is the dump from the resulting DICOM image:
   (fffe,e000) pi (no value available)                     #   0, 1 Item
   (fffe,e000) pi ff\d8\ff\db\00\43\00\03\02\02\03\02\02\03\03\03\03\04\03\03\04\05... # 326, 1 Item
 (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
+```
+
+Changing an existing DICOM file is easy as well with dcmodify:
+
+```bash
+> dcmdump +P StudyDescription PI.1.3.6.1.4.1.14519.5.2.1.6450.9002.927456543152011698231718997971 
+(0008,1030) LO [PTCTSKTHPET / CT TUMOR]                 #  22, 1 StudyDescription
+> dcmodify -m "StudyDescription=I changed that" PI.1.3.6.1.4.1.14519.5.2.1.6450.9002.927456543152011698231718997971
+> dcmdump +P StudyDescription PI.1.3.6.1.4.1.14519.5.2.1.6450.9002.927456543152011698231718997971 
+(0008,1030) LO [I changed that]                         #  14, 1 StudyDescription
 ```
 
 ## Send DICOM around
